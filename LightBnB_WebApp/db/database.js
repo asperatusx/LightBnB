@@ -54,7 +54,10 @@ const getUserWithId = function (id) {
  */
 const addUser = function (user) {
   const { name, email, password } = user
-  return pool.query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`, [name, email, password])
+  const values = [name, email, password];
+  const queryString = `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`;
+  
+  return pool.query(queryString, values)
   .then(res => {
     return res.rows[0]
   })
