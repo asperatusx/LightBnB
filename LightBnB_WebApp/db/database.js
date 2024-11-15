@@ -111,27 +111,28 @@ const getAllProperties = function (options, limit = 10) {
   SELECT properties.*, avg(property_reviews.rating) as average_rating
   FROM properties
   JOIN property_reviews ON properties.id = property_id
+  WHERE 1=1 
   `;
 
   // 3
   if (options.city) {
     queryParams.push(`%${options.city}%`);
-    queryString += `WHERE city LIKE $${queryParams.length} `;
+    queryString += `AND city LIKE $${queryParams.length} `;
   }
   if (options.owner_id) {
     queryParams.push(options.owner_id);
-    queryString += queryParams.length === 1 ? `WHERE ` : `AND `;
-    queryString += `owner_id = $${queryParams.length} `;
+    // queryString += queryParams.length === 1 ? `WHERE ` : `AND `;
+    queryString += `AND owner_id = $${queryParams.length} `;
   }
   if (options.minimum_price_per_night) {
     queryParams.push(options.minimum_price_per_night * 100);
-    queryString += queryParams.length === 1 ? `WHERE ` : `AND `;
-    queryString += `cost_per_night >= $${queryParams.length} `;
+    // queryString += queryParams.length === 1 ? `WHERE ` : `AND `;
+    queryString += `AND cost_per_night >= $${queryParams.length} `;
   }
   if (options.maximum_price_per_night) {
     queryParams.push(options.maximum_price_per_night * 100);
-    queryString += queryParams.length === 1 ? `WHERE ` : `AND `;
-    queryString += `cost_per_night <= $${queryParams.length} `;
+    // queryString += queryParams.length === 1 ? `WHERE ` : `AND `;
+    queryString += `AND cost_per_night <= $${queryParams.length} `;
   }
   queryString += `GROUP BY properties.id `
 
